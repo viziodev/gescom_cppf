@@ -12,16 +12,16 @@ import java.util.List;
 public interface ClientController {
     ///clients?page=1&size=10  ==>  /clients
     @GetMapping("/paginate")
-    public ResponseEntity<List<ClientListeDto>> listerClientPaginate (@RequestParam(defaultValue = "0") int page, @RequestParam (defaultValue = "2")int size );
+    public ResponseEntity<?> listerClientPaginate (@RequestParam(defaultValue = "0") int page, @RequestParam (defaultValue = "2")int size );
     @GetMapping("")
-    public ResponseEntity<List<ClientListeDto>> listerClient ();
+    public ResponseEntity<?> listerClient ();
     ///clients/1
      @GetMapping("/{id}")
-    public ResponseEntity<ClientListeDto> listerUnClient (@PathVariable Long id);
+    public ResponseEntity<?> listerUnClient (@PathVariable Long id);
     @PutMapping("/{id}")
-    public ResponseEntity<ClientListeDto> editClient (@PathVariable Long id,@RequestBody ClientCreateDto client);
+    public ResponseEntity<?> editClient (@PathVariable Long id,@RequestBody ClientCreateDto client);
     @DeleteMapping("/{id}")
-    public ResponseEntity<ClientListeDto> deleteClient (@PathVariable Long id);
+    public ResponseEntity<?> deleteClient (@PathVariable Long id);
     @PostMapping("")
-    public ResponseEntity<ClientCreateDto> creerClient (@RequestBody ClientCreateDto client);
+    public ResponseEntity<?> creerClient (@RequestBody ClientCreateDto client);
 }

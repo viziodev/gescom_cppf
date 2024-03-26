@@ -3,6 +3,7 @@ package com.cppf.gescom.gescom.web.controllers.impl;
 import com.cppf.gescom.gescom.data.entity.Client;
 import com.cppf.gescom.gescom.service.ClientService;
 import com.cppf.gescom.gescom.web.controllers.ClientController;
+import com.cppf.gescom.gescom.web.dto.RestReponseDto;
 import com.cppf.gescom.gescom.web.dto.request.ClientCreateDto;
 import com.cppf.gescom.gescom.web.dto.response.ClientListeDto;
 import lombok.RequiredArgsConstructor;
@@ -12,49 +13,60 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 public class ClientControllerImpl implements ClientController {
     private final ClientService clientService;
     @Override
-    public ResponseEntity<List<ClientListeDto>> listerClientPaginate(int page, int size) {
+    public ResponseEntity<Map<Object, Object>> listerClientPaginate(int page, int size) {
         Page<Client> allClient = clientService.getAllClient(page, size);
         Page<ClientListeDto> pageClientDto = allClient.map(ClientListeDto::toDto);
-        return new ResponseEntity(pageClientDto, HttpStatus.OK);
+        Map<Object, Object> response = RestReponseDto.responsePaginate(pageClientDto.getContent(),
+                pageClientDto.isLast(),
+                pageClientDto.getTotalPages(),
+                pageClientDto.getTotalElements(),
+                pageClientDto.getNumber(),
+                pageClientDto.isFirst(),
+                HttpStatus.OK);
+           return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<ClientListeDto>> listerClient() {
+    public ResponseEntity<Map<Object, Object>> listerClient() {
 
         List<ClientListeDto> list = clientService.getAllClient()
                 .stream()
                 .map(ClientListeDto::toDto).toList();
-        return new ResponseEntity(list, HttpStatus.OK);
+        Map<Object, Object> response = RestReponseDto.response(list, HttpStatus.OK);
+        return new ResponseEntity(response, HttpStatus.OK);
 
     }
 
     @Override
-    public ResponseEntity<ClientListeDto> listerUnClient(Long id) {
+    public ResponseEntity<Map<Object, Object>> listerUnClient(Long id) {
         Client client = clientService.getClientById(id);
-        return new ResponseEntity(ClientListeDto.toDto(client), HttpStatus.OK);
+        Map<Object, Object> response = RestReponseDto.response(ClientListeDto.toDto(client), HttpStatus.OK);
+        return new ResponseEntity(response, HttpStatus.OK);
 
     }
 
     @Override
-    public ResponseEntity<ClientListeDto> editClient(Long id, ClientCreateDto client) {
+    public ResponseEntity<Map<Object, Object>> editClient(Long id, ClientCreateDto client) {
         return null;
     }
 
     @Override
-    public ResponseEntity<ClientListeDto> deleteClient(Long id) {
+    public ResponseEntity<Map<Object, Object>> deleteClient(Long id) {
         return null;
     }
 
     @Override
-    public ResponseEntity<ClientCreateDto> creerClient(ClientCreateDto clientCreateDto) {
+    public ResponseEntity<Map<Object, Object>> creerClient(ClientCreateDto clientCreateDto) {
         Client entity = clientCreateDto.toEntity();
         Client client = clientService.CreateClient(entity);
-        return new ResponseEntity(ClientListeDto.toDto(client), HttpStatus.CREATED);
+        Map<Object, Object> response = RestReponseDto.response(ClientListeDto.toDto(client), HttpStatus.CREATED);
+        return new ResponseEntity(response, HttpStatus.CREATED);
     }
 }
