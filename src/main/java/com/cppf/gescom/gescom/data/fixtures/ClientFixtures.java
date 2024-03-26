@@ -5,10 +5,12 @@ import com.cppf.gescom.gescom.data.entity.Client;
 import com.cppf.gescom.gescom.data.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
+@Order(1)
 public class ClientFixtures implements CommandLineRunner {
     private  final ClientRepository clientRepository;
 
