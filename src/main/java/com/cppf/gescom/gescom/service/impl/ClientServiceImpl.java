@@ -33,6 +33,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client CreateClient(Client client) {
+          client.setActive(true);
           clientRepository.save(client);
           return client;
     }
